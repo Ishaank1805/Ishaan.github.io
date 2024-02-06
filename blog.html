@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        #content {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .blog {
+            width: 45%;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            max-width: 400px;
+        }
+
+        .blog textarea {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+        }
+
+        .blog .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .blog button {
+            flex-grow: 1;
+        }
+
+        .blog .likes {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris efficitur ullamcorper auctor. Nulla auctor neque ut neque faucibus pellentesque. Aenean sit amet vehicula velit, at sollicitudin sapien. Vivamus accumsan varius posuere. Proin a neque placerat, pellentesque lectus ut, rhoncus est. Curabitur dignissim semper velit vel iaculis. Etiam eu consequat tortor. Vivamus mollis, diam vel rhoncus semper, elit justo tincidunt odio, nec tristique justo dui at dui. In interdum vulputate est, vel hendrerit elit pretium vitae. Fusce sollicitudin tincidunt ligula sed rutrum. Nullam sed lectus sem. Vestibulum ac ultricies augue, a viverra tortor. Praesent tristique, lectus nec pretium ultricies, justo risus tincidunt est, sit amet molestie enim dolor dapibus quam.</p>
+
+    <div id="content">
+        <div id="blog1" class="blog">
+            <h2>Blog 1</h2>
+            <div>
+                <textarea id="comments_blog1" placeholder="Add a comment"></textarea>
+                <div class="button-container">
+                    <span id="likes_blog1" class="likes">0 Likes</span>
+                    <button onclick="like('blog1')">Like</button>
+                    <button onclick="comment('blog1')">Add Comment</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="blog2" class="blog">
+            <h2>Blog 2</h2>
+            <div>
+                <textarea id="comments_blog2" placeholder="Add a comment"></textarea>
+                <div class="button-container">
+                    <span id="likes_blog2" class="likes">0 Likes</span>
+                    <button onclick="like('blog2')">Like</button>
+                    <button onclick="comment('blog2')">Add Comment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function like(blogId) {
+            const likesElement = document.getElementById(`likes_${blogId}`);
+            let likes = parseInt(localStorage.getItem(`${blogId}_likes`) || 0);
+            likes++;
+            likesElement.textContent = `${likes} Likes`;
+            localStorage.setItem(`${blogId}_likes`, likes);
+        }
+
+        function comment(blogId) {
+            const commentsElement = document.getElementById(`comments_${blogId}`);
+            const commentText = commentsElement.value;
+            if (commentText.trim() !== '') {
+                const existingComments = JSON.parse(localStorage.getItem(`${blogId}_comments`) || '[]');
+                existingComments.push(commentText);
+                localStorage.setItem(`${blogId}_comments`, JSON.stringify(existingComments));
+                commentsElement.value = '';
+            }
+        }
+
+        function loadBlogData(blogId) {
+            const likesElement = document.getElementById(`likes_${blogId}`);
+            const commentsElement = document.getElementById(`comments_${blogId}`);
+            
+            const likes = localStorage.getItem(`${blogId}_likes`) || 0;
+            const comments = JSON.parse(localStorage.getItem(`${blogId}_comments`) || '[]');
+
+            likesElement.textContent = `${likes} Likes`;
+        }
+
+        loadBlogData('blog1');
+        loadBlogData('blog2');
+    </script>
+</body>
+
+</html>
